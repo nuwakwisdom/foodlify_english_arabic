@@ -20,6 +20,7 @@ import 'package:Foodlify/features/home/presentation/pages/add_to_cart.dart';
 import 'package:Foodlify/features/home/presentation/pages/choose_location_page.dart';
 import 'package:Foodlify/features/home/presentation/widgets/login_required_dialog.dart';
 import 'package:Foodlify/features/restaurant/presentation/pages/restaurant_page.dart';
+import 'package:Foodlify/main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,6 +31,8 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:Foodlify/main.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimelinScreen extends StatefulWidget {
   const TimelinScreen({
@@ -70,9 +73,14 @@ class _TimelinScreenState extends State<TimelinScreen> {
     return format.currencySymbol;
   }
 
+  String language = '';
   Future<String?> getLocationString() async {
     final preferences = await SharedPreferences.getInstance();
     final location = preferences.getString('location');
+    final selectedlanguage = preferences.getString('languageCode') ?? 'en';
+    setState(() {
+      selectedlanguage == 'ar' ? language = 'عربي' : language = 'English';
+    });
     return location;
   }
 
@@ -144,41 +152,105 @@ class _TimelinScreenState extends State<TimelinScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Gap(2),
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(12),
-                              ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(12),
+                                  ),
+                                ),
+                                context: context,
+                                builder: (context) {
+                                  return const LocationModal();
+                                });
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_city,
+                                  color: FoodlieColors.grey,
+                                ),
+                                const Gap(5),
+                                TextBold(
+                                  widget.cityName,
+                                  fontSize: 14,
+                                  color: FoodlieColors.textColor,
+                                ),
+                                const Gap(5),
+                                const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: FoodlieColors.grey,
+                                )
+                              ],
                             ),
-                            context: context,
-                            builder: (context) {
-                              return const LocationModal();
-                            });
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.location_city,
-                              color: FoodlieColors.grey,
-                            ),
-                            const Gap(5),
-                            TextBold(
-                              widget.cityName,
-                              fontSize: 14,
-                              color: FoodlieColors.textColor,
-                            ),
-                            const Gap(5),
-                            const Icon(
-                              Icons.keyboard_arrow_down,
-                              color: FoodlieColors.grey,
-                            )
-                          ],
+                          ),
                         ),
-                      ),
+                        TextButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: FoodlieColors.foodlieWhite,
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              Navigator.pop(context);
+                                              App.setLocale(
+                                                context,
+                                                const Locale('en'),
+                                              );
+                                              language = 'English';
+                                            });
+                                          },
+                                          child: TextSemiBold(
+                                            'English',
+                                            fontSize: 15,
+                                            color: FoodlieColors.primaryColor,
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              Navigator.pop(context);
+                                              App.setLocale(
+                                                context,
+                                                const Locale('ar'),
+                                              );
+                                              language = 'عربي';
+                                            });
+                                          },
+                                          child: TextSemiBold(
+                                            'عربي',
+                                            fontSize: 15,
+                                            color: FoodlieColors.primaryColor,
+                                          ),
+                                        ),
+                                        const Gap(30),
+                                      ],
+                                    ),
+                                  );
+                                });
+                          },
+                          child: TextSemiBold(
+                            language,
+                            fontSize: 15,
+                            color: FoodlieColors.primaryColor,
+                          ),
+                        )
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,7 +261,9 @@ class _TimelinScreenState extends State<TimelinScreen> {
                           },
                           builder: (context, state) {
                             return TextSemiBold(
-                              user == null ? '' : 'Hi ${user.first_name ?? ''}',
+                              user == null
+                                  ? ''
+                                  : '${AppLocalizations.of(context).hi} ${user.first_name ?? ''}',
                               fontSize: 15,
                               color: FoodlieColors.primaryColor,
                             );
@@ -394,7 +468,7 @@ class _TimelinScreenState extends State<TimelinScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 TextBold(
-                                  'Restaurant around you',
+                                  '${AppLocalizations.of(context).restaurantAroundYou}',
                                   fontSize: 13,
                                   color: FoodlieColors.foodlieBlack
                                       .withOpacity(0.6),
@@ -409,7 +483,7 @@ class _TimelinScreenState extends State<TimelinScreen> {
                                         );
                                       },
                                       child: TextSemiBold(
-                                        'Show all',
+                                        AppLocalizations.of(context).showAll,
                                         fontSize: 11,
                                         color: FoodlieColors.foodliePink,
                                       ),
@@ -525,7 +599,7 @@ class _TimelinScreenState extends State<TimelinScreen> {
                             ),
                             const Gap(6),
                             TextSemiBold(
-                              'Meals Around you',
+                              AppLocalizations.of(context).mealsAroundYou,
                               fontSize: 14.3,
                               color:
                                   FoodlieColors.foodlieBlack.withOpacity(0.6),

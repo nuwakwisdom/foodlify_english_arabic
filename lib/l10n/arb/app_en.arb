@@ -11,5 +11,41 @@
   "multiLanguage":"Multi Language",
   "@multiLanguage":{
     "description":"title"
-  } 
+  },
+  "restaurant":"Restaurant",
+  "@restaurant":{
+    "description":"restaurant"
+  },
+  "hi":"Hi",
+  "@hi":{
+    "description":"hi"
+  },
+  "mealsAroundYou":"Meals Around You",
+  "@mealsAroundYou":{
+    "description":"Meals Around You"
+  },
+   "home":"Home",
+  "@home":{
+    "description":"Home"
+  },
+   "restaurantAroundYou":"Restaurant Around You",
+  "@restaurantAroundYou":{
+    "description":"Restaurant Around You"
+  },
+   "orders":"Orders",
+  "@orders":{
+    "description":"Orders"
+  },
+   "wallet":"Wallet",
+  "@wallet":{
+    "description":"wallet"
+  },
+  "account":"Account",
+  "@account":{
+    "description":"Account"
+  },
+   "showAll":"Show All",
+  "@showAll":{
+    "description":"Show All"
+  }
 }

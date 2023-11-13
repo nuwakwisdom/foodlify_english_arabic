@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
 
 import 'core/constant/constant.dart';
@@ -89,8 +90,44 @@ void main() async {
   );
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
+  static void setLocale(BuildContext context, Locale newLocale) async {
+    _AppState? state = context.findAncestorStateOfType<_AppState>();
+
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString('languageCode', newLocale.languageCode);
+    prefs.setString('countryCode', "");
+
+    state?.setState(() {
+      state._locale = newLocale;
+    });
+  }
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  Locale _locale = const Locale('en', 'en');
+  @override
+  void initState() {
+    super.initState();
+    _fetchLocale().then((locale) {
+      setState(() {
+        _locale = locale;
+      });
+    });
+  }
+
+  Future<Locale> _fetchLocale() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    String languageCode = prefs.getString('languageCode') ?? 'en';
+    String countryCode = prefs.getString('countryCode') ?? 'en';
+
+    return Locale(languageCode, countryCode);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +257,7 @@ class App extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           supportedLocales: L10n.all,
-          locale: const Locale('en'),
+          locale: _locale,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

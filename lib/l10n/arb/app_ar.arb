@@ -2,5 +2,14 @@
   "@@locale":"ar" ,
   "language":"لغة" ,
   "helloWorld":"مرحبا بالعالم",
-  "multiLanguage":"متعدد اللغات"
+  "multiLanguage":"متعدد اللغات",
+  "restaurant":"مطعم",
+  "hi" :"أهلاً",
+  "mealsAroundYou":"وجبات من حولك",
+  "home":"بيت",
+  "restaurantAroundYou":"مطعم حولك",
+  "orders":"طلبات",
+  "wallet":"محفظة",
+  "account":"حساب",
+  "showAll":"عرض الكل"
 }  

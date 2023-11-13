@@ -28,6 +28,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeNav extends StatefulWidget {
   const HomeNav({
@@ -265,7 +266,7 @@ class _HomeNavState extends State<HomeNav> {
                 color: FoodlieColors.grey,
               ),
             ),
-            label: 'Home',
+            label: AppLocalizations.of(context).home,
             activeIcon: Padding(
               padding: const EdgeInsets.only(
                 top: 10,
@@ -284,7 +285,7 @@ class _HomeNavState extends State<HomeNav> {
                 AppAssets.ordersIcon,
               ),
             ),
-            label: 'Orders',
+            label: AppLocalizations.of(context).orders,
             activeIcon: Padding(
               padding: const EdgeInsets.only(
                 top: 10,
@@ -306,7 +307,7 @@ class _HomeNavState extends State<HomeNav> {
                 width: 30,
               ),
             ),
-            label: 'Wallet',
+            label: AppLocalizations.of(context).wallet,
             activeIcon: Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 5),
               child: SvgPicture.asset(
@@ -324,7 +325,7 @@ class _HomeNavState extends State<HomeNav> {
                 AppAssets.profileIcon,
               ),
             ),
-            label: 'Account',
+            label: AppLocalizations.of(context).account,
             activeIcon: Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 5),
               child: SvgPicture.asset(
